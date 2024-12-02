@@ -1,0 +1,20 @@
+[Bài Tập] So sánh cấu trúc dữ liệu
+
+- Mảng :
+    + Đặc điểm chính: lưu trữ dữ liệu trong một vùng bộ nhớ liên tiếp. Mỗi phần tử trong mảng có thể được truy cập trực tiếp thông qua chỉ số của nó.
+    + Ứng dụng: lưu trữ các danh sách tĩnh 
+- Danh sách liên kết :
+    + Đặc điểm chính: Gồm các phần tử được liên kết với nhau bằng các con trỏ, tạo thành một chuỗi. Mỗi nút chứa dữ liệu và con trỏ trỏ đến nút kế tiếp.
+    + Ứng dụng: lưu trữ các danh sách động 
+- Ngăn xếp :
+    + Đặc điểm chính: cấu trúc dữ liệu theo nguyên tắc "LIFO" phần tử cuối cùng được thêm vào sẽ là phần tử đầu tiên được lấy ra.
+    + Ứng dụng: quản lí các hàm trong lập trình ví dụ như đệ quy,.. hoặc lưu trữ lịch sử trình duyệt web.
+- Hành đợi :
+    + Đặc điểm chính: Là cấu trúc dữ liệu theo nguyên tắc "FIFO" phần tử đầu tiên được thêm vào sẽ là phần tử đầu tiên được lấy ra.
+    + Ứng dụng: Quản lí các tác vụ trong hệ điều hành, in ấn, bộ nhớ đệm liên quan đến mạng
+- Cây :
+    + Đặc điểm chính: cấu trúc dữ liệu phân cấp bao gồm các nút. Nút gốc là nút chính và các nút con được kết nối với nhau theo cấu trúc phân nhánh, trong đó mỗi nút có thể có nhiều nút con.
+    + Ứng dụng: Các bài toán ra quyết định, phân tích dữ liệu,..
+- Đồ thị :
+    + Đặc điểm chính:  Là một tập hợp các đỉnh và các cạnh nối giữa các đỉnh. Đồ thị có thể có hoặc không có hướng, và mỗi đỉnh có thể kết nối với nhiều đỉnh khác.
+    + Ứng dụng: Mạng máy tính, tìm kiếm đường đi,...

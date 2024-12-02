@@ -1,0 +1,17 @@
+[Bài Tập] Ứng dụng thực tế của cấu trúc dữ liệu
+
+1. Lưu trữ danh sách sinh viên theo thứ tự nhập vào
+ - mảng : vì bảo toàn thứ tự sinh viên, dễ dàng duyệt qua và truy cập dựa trên chỉ mục.
+ - danh sách liên kết: cũng bảo toàn thứ tự và nếu danh sách sinh viên có thay đổi thì dễ thêm hay xóa hơn.
+
+2. Tìm kiếm nhanh tên một sản phẩm trong danh sách hàng triệu sản phẩm
+ - mảng: có thể kết hợp thuật toán tìm kiếm tuyến tính hoặc nhị phân (nếu mảng đã sắp xếp)
+
+3. Quản lý danh sách các task công việc cần xử lý theo thứ tự ưu tiên
+ - hàng đợi: nếu xử lí task theo trình tự ưu tiên, task trước thì xử lí trước
+
+4. Lưu trữ dữ liệu hệ thống phân cấp như thư mục máy tính
+ - Cây: vì thư mục phân cấp sẽ phù hợp với các phân cấp trong cây, một thư mục có thể có nhiều thư mục con hoặc file.
+
+5. Tìm đường đi ngắn nhất giữa 2 điểm trên bản đồ
+ - đồ thị: biểu diễn các điểm trực quan và kết hợp với thuật toán Dijkstra 

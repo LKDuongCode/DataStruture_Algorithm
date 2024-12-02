@@ -1,0 +1,6 @@
+
+    - hình elip: bắt đầu hoặc kết thúc
+    - hình chữ nhật: xử lí, tính toán dữ liệu
+    - hình bình hành:nhập xuất dữ liệu
+    - hình thoi: rẽ nhánh
+    - mũi tên: thể hiện dòng chảy
