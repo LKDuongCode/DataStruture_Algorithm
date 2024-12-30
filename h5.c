@@ -8,7 +8,7 @@ struct Node {
 };
 
 struct Node* createNode(int data);
-struct Node* search(struct Node* root, int key);
+int findMax(struct Node* root);
 
 int main() {
     struct Node* root = createNode(10);
@@ -18,21 +18,16 @@ int main() {
     root->left->right = createNode(7);
     root->right->left = createNode(15);
     root->right->right = createNode(25);
-
-    int key;
-    printf(" gia tri can tim : ");
-    scanf("%d", &key);
-
-    struct Node* result = search(root, key);
-    if (result != NULL) {
-        printf("tim thay.\n", result->data);
-    } else {
-        printf("khong tim thay.\n", key);
-    }
+    
+    int maxValue = findMax(root);
+    if(maxValue != -1){
+    	printf("gia tri lon nhat la: %d\n", maxValue);
+	}else{
+		printf("khong thay");
+	}
 
     return 0;
 }
-
 
 struct Node* createNode(int data) {
     struct Node* newNode = (struct Node*)malloc(sizeof(struct Node));
@@ -42,18 +37,22 @@ struct Node* createNode(int data) {
     return newNode;
 }
 
-struct Node* search(struct Node* root, int key) {
-    if (root == NULL || root->data == key) {
-        return root; // tra ve node neu tim thay hoac cay rong
+int findMax(struct Node* root) {
+    if (root == NULL) {
+        return -1;
     }
 
-    // tim trong cay con trai
-    struct Node* leftSearch = search(root->left, key);
-    if (leftSearch != NULL) {
-        return leftSearch; 
-    }
+    int leftMax = findMax(root->left);
+    int rightMax = findMax(root->right);
 
-    // tim trong cay con phai
-    return search(root->right, key);
+    // ss gia tri cua nut hien tai voi gia tri lon nhat cua hai cay con
+    int max = root->data;
+    if (leftMax > max) {
+        max = leftMax;
+    }
+    if (rightMax > max) {
+        max = rightMax;
+    }
+    return max;
 }
 

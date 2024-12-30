@@ -1,169 +1,122 @@
 #include <stdio.h>
 #include <stdlib.h>
-#include <stdbool.h>
 
-typedef struct Node {
-    int vertex;
-    struct Node* next;
-} Node;
+struct Node {
+    int data;
+    struct Node* left;
+    struct Node* right;
+};
 
-typedef struct Graph {
-    int numVertices;
-    Node** adjLists;
-    bool* visited;
-} Graph;
+struct QueueNode {
+    struct Node* treeNode;
+    struct QueueNode* next;
+};
 
-typedef struct Queue {
-    int* items;
-    int front;
-    int rear;
-    int size;
-} Queue;
+struct Queue {
+    struct QueueNode* front;
+    struct QueueNode* rear;
+};
 
-Node* createNode(int vertex);
-Graph* createGraph(int vertices);
-void addEdge(Graph* graph, int src, int dest);
-void printGraph(Graph* graph);
-Queue* createQueue(int size);
-bool isEmpty(Queue* queue);
-void enqueue(Queue* queue, int value);
-int dequeue(Queue* queue);
-void bfs(Graph* graph, int startVertex);
+
+struct Node* createNode(int data);
+struct Queue* createQueue();
+int isEmpty(struct Queue* q);
+void enqueue(struct Queue* q, struct Node* treeNode);
+struct Node* dequeue(struct Queue* q);
+int calculateHeight(struct Node* root);
 
 int main() {
-    int V, E;
-    printf("nhap so dinh: ");
-    scanf("%d", &V);
-    printf("nhap so canh: ");
-    scanf("%d", &E);
+    struct Node* root = createNode(1);
+    root->left = createNode(2);
+    root->right = createNode(3);
+    root->left->left = createNode(4);
 
-    Graph* graph = createGraph(V);
-
-    printf("nhap cac canh (u v):\n");
-    for (int i = 0; i < E; i++) {
-        int u, v;
-        scanf("%d %d", &u, &v);
-        addEdge(graph, u, v);
-    }
-
-    int startVertex;
-    printf("nhap dinh bat dau duyet: ");
-    scanf("%d", &startVertex);
-
-    bfs(graph, startVertex);
+    int height = calculateHeight(root);
+    printf("chieu cao cua cay %d\n", height);
 
     return 0;
 }
 
-// ham tao mot nut moi
-Node* createNode(int vertex) {
-    Node* newNode = (Node*)malloc(sizeof(Node));
-    newNode->vertex = vertex;
-    newNode->next = NULL;
+struct Node* createNode(int data) {
+    struct Node* newNode = (struct Node*)malloc(sizeof(struct Node));
+    newNode->data = data;
+    newNode->left = NULL;
+    newNode->right = NULL;
     return newNode;
 }
 
-// ham tao do thi
-Graph* createGraph(int vertices) {
-    Graph* graph = (Graph*)malloc(sizeof(Graph));
-    graph->numVertices = vertices;
+// tao hang doi
+struct Queue* createQueue() {
+    struct Queue* q = (struct Queue*)malloc(sizeof(struct Queue));
+    q->front = q->rear = NULL;
+    return q;
+}
 
-    graph->adjLists = (Node**)malloc(vertices * sizeof(Node*));
-    graph->visited = (bool*)malloc(vertices * sizeof(bool));
+int isEmpty(struct Queue* q) {
+    return q->front == NULL;
+}
 
-    for (int i = 0; i < vertices; i++) {
-        graph->adjLists[i] = NULL;
-        graph->visited[i] = false;
+// them mot phan tu vao 
+void enqueue(struct Queue* q, struct Node* treeNode) {
+    struct QueueNode* newNode = (struct QueueNode*)malloc(sizeof(struct QueueNode));
+    newNode->treeNode = treeNode;
+    newNode->next = NULL;
+    if (q->rear == NULL) {
+        q->front = q->rear = newNode;
+        return;
+    }
+    q->rear->next = newNode;
+    q->rear = newNode;
+}
+
+//lay phan tu ra 
+struct Node* dequeue(struct Queue* q) {
+    if (isEmpty(q)) {
+        return NULL;
+    }
+    struct QueueNode* temp = q->front;
+    struct Node* treeNode = temp->treeNode;
+    q->front = q->front->next;
+    if (q->front == NULL) {
+        q->rear = NULL;
+    }
+    free(temp);
+    return treeNode;
+}
+
+int calculateHeight(struct Node* root) {
+    if (root == NULL) {
+        return 0; // cay rong 
     }
 
-    return graph;
-}
+    struct Queue* q = createQueue(); // tao hang doi
+    enqueue(q, root);
+    int height = 0;
 
-// ham them canh vao do thi
-void addEdge(Graph* graph, int src, int dest) {
-    // them canh tu src den dest
-    Node* newNode = createNode(dest);
-    newNode->next = graph->adjLists[src];
-    graph->adjLists[src] = newNode;
+    while (!isEmpty(q)) {
+        int nodeCount = 0; // dem so node o moi muc
+        struct QueueNode* temp = q->front;
 
-    // them canh tu dest den src (do thi vo huong)
-    newNode = createNode(src);
-    newNode->next = graph->adjLists[dest];
-    graph->adjLists[dest] = newNode;
-}
-
-// ham in do thi
-void printGraph(Graph* graph) {
-    for (int v = 0; v < graph->numVertices; v++) {
-        Node* temp = graph->adjLists[v];
-        printf("danh sach ke cua dinh %d:\n", v);
-        while (temp) {
-            printf("%d -> ", temp->vertex);
+        // dem so node trong muc hien tai
+        while (temp != NULL) {
+            nodeCount++;
             temp = temp->next;
         }
-        printf("NULL\n");
-    }
-}
 
-// ham tao hang doi
-Queue* createQueue(int size) {
-    Queue* queue = (Queue*)malloc(sizeof(Queue));
-    queue->items = (int*)malloc(size * sizeof(int));
-    queue->front = -1;
-    queue->rear = -1;
-    queue->size = size;
-    return queue;
-}
+        // duyet tat ca cac node trong muc hien tai
+        while (nodeCount--) {
+            struct Node* current = dequeue(q);
 
-bool isEmpty(Queue* queue) {
-    return queue->front == -1;
-}
-
-void enqueue(Queue* queue, int value) {
-    if (queue->rear == queue->size - 1)
-        return; // hang doi day
-    if (isEmpty(queue))
-        queue->front = 0;
-    queue->items[++queue->rear] = value;
-}
-
-int dequeue(Queue* queue) {
-    if (isEmpty(queue))
-        return -1;
-    int item = queue->items[queue->front];
-    if (queue->front >= queue->rear) {
-        queue->front = -1;
-        queue->rear = -1;
-    } else {
-        queue->front++;
-    }
-    return item;
-}
-
-// bfs thuat toan
-void bfs(Graph* graph, int startVertex) {
-    Queue* queue = createQueue(graph->numVertices);
-
-    graph->visited[startVertex] = true;
-    enqueue(queue, startVertex);
-
-    printf("duyet bfs: ");
-
-    while (!isEmpty(queue)) {
-        int currentVertex = dequeue(queue);
-        printf("%d ", currentVertex);
-
-        Node* temp = graph->adjLists[currentVertex];
-
-        while (temp) {
-            int adjVertex = temp->vertex;
-
-            if (!graph->visited[adjVertex]) {
-                graph->visited[adjVertex] = true;
-                enqueue(queue, adjVertex);
+            // them cac node con vao hang doi
+            if (current->left != NULL) {
+                enqueue(q, current->left);
             }
-            temp = temp->next;
+            if (current->right != NULL) {
+                enqueue(q, current->right);
+            }
         }
+        height++; 
     }
-    printf("\n");
+
+    return height;
 }
